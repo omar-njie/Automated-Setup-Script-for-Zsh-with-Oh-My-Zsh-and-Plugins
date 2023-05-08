@@ -1,40 +1,34 @@
 #!/bin/bash
 
-# Check if Git is installed
-if ! command -v git &> /dev/null
-then
-    # Install Git based on the Linux distribution
-    if [ -f /etc/redhat-release ]; then
-        sudo yum install git -y
-    elif [ -f /etc/lsb-release ]; then
-        sudo apt-get update
-        sudo apt-get install git -y
-    fi
+# Check if git is installed and install it if not
+if ! [ -x "$(command -v git)" ]; then
+  echo 'Git is not installed. Installing now...'
+  if [ -f /etc/redhat-release ]; then
+    sudo yum install git -y
+  elif [ -f /etc/lsb-release ]; then
+    sudo apt install git -y
+  fi
+else
+  echo 'Git is already installed.'
 fi
 
-if ! command -v zsh &> /dev/null
-then
-    # Install Zsh based on the Linux distribution
-    if [ -f /etc/redhat-release ]; then
-        sudo yum install zsh -y
-    elif [ -f /etc/lsb-release ]; then
-        sudo apt-get update
-        sudo apt-get install zsh -y
-    fi
+# Install zsh
+echo 'Installing zsh...'
+if [ -f /etc/redhat-release ]; then
+  sudo yum install zsh -y
+elif [ -f /etc/lsb-release ]; then
+  sudo apt install zsh -y
 fi
 
-if [ ! -d ~/.oh-my-zsh ]
-then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-fi
+# Install oh-my-zsh
+echo 'Installing oh-my-zsh...'
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]
-then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-fi
+echo 'Adding plugins to .zshrc...'
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
 
-if [ ! -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]
-then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-fi
+echo 'Sourcing .zshrc...'
+source ~/.zshrc
+echo 'Resetting terminal...'
+reset
 
