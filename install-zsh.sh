@@ -47,6 +47,5 @@ sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/
 
 echo 'Sourcing .zshrc...'
 source ~/.zshrc
-echo 'Resetting terminal...'
-reset
-
+echo 'Restarting terminal...'
+tset
