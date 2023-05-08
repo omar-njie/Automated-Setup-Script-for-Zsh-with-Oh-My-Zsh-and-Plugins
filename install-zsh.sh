@@ -25,7 +25,7 @@ echo 'Installing oh-my-zsh...'
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 ##################################################
-##   	   CUSTOM PLUGINS BEGIN HERE	  ##
+##   	   CUSTOM PLUGINS BEGIN HERE	       ##
 ##################################################
 
 # zsh-autosuggestions
