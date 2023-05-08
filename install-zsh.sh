@@ -25,7 +25,7 @@ echo 'Installing oh-my-zsh...'
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 ##################################################
-##   	   CUSTOM PLUGINS BEGIN HERE			##
+##   	   CUSTOM PLUGINS BEGIN HERE	##
 ##################################################
 
 # zsh-autosuggestions
@@ -39,7 +39,7 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 fi
 
 ##################################################
-##   	   CUSTOM PLUGINS END HERE		     	##
+##   	   CUSTOM PLUGINS END HERE		##
 ##################################################
 
 echo 'Adding plugins to .zshrc...'
