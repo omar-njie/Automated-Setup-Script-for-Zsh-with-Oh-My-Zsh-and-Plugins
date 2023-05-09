@@ -13,54 +13,52 @@ else
 fi
 
 # Install zsh
-if ! [ -x "$(command -v zsh)" ]; then
-  echo 'Zsh is not installed. Installing now...'
-  if [ -f /etc/redhat-release ]; then
-    sudo yum install zsh -y
-  elif [ -f /etc/lsb-release ]; then
-    sudo apt install zsh -y
-  fi
-else
-  echo 'Zsh is already installed.'
+echo 'Installing zsh...'
+if [ -f /etc/redhat-release ]; then
+  sudo yum install zsh -y
+elif [ -f /etc/lsb-release ]; then
+  sudo apt install zsh -y
+fi
+
+# Check if .zshrc exists
+if [ ! -f "$HOME/.zshrc" ]; then
+  echo "Creating .zshrc file..."
+  touch "$HOME/.zshrc"
 fi
 
 # Install oh-my-zsh
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  echo 'Installing oh-my-zsh...'
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-  echo 'oh-my-zsh is already installed.'
-fi
+echo 'Installing oh-my-zsh...'
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 ##################################################
-##   	   CUSTOM PLUGINS BEGIN HERE	        ##
+##           CUSTOM PLUGINS BEGIN HERE          ##
 ##################################################
 
 # zsh-autosuggestions
 if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-    echo 'Installing zsh-autosuggestions...'
     git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-else
-    echo 'zsh-autosuggestions is already installed.'
 fi
 
 # zsh-syntax-highlighting
 if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-    echo 'Installing zsh-syntax-highlighting...'
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-else
-    echo 'zsh-syntax-highlighting is already installed.'
 fi
 
 ##################################################
-##   	   CUSTOM PLUGINS END HERE		##
+##           CUSTOM PLUGINS END HERE            ##
 ##################################################
 
-echo 'Adding plugins to .zshrc...'
-sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+# Add plugins to .zshrc if not already added
+if ! grep -q 'zsh-autosuggestions' $HOME/.zshrc; then
+    echo 'Adding plugins to .zshrc...'
+    echo 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting)' >> $HOME/.zshrc
+fi
 
+# Source .zshrc
 echo 'Sourcing .zshrc...'
-source ~/.zshrc
+source $HOME/.zshrc
+
+# Restart terminal
 echo 'Restarting terminal...'
 tset
 
