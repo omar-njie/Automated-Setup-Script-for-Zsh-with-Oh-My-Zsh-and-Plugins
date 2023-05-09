@@ -46,10 +46,9 @@ else
   echo 'oh-my-zsh is already installed.'
 fi
 
-while [ ! -f "$HOME/.zshrc" ]; do
+while [ ! -d "$HOME/.oh-my-zsh" ]; do
   sleep 1
 done
-
 
 ##################################################
 ##           CUSTOM PLUGINS BEGIN HERE          ##
