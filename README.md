@@ -21,7 +21,7 @@ chmod +x script-name.sh
 ```
 
 ## Usage
-Once everything is installed make to run `script-name.sh` again for the custom plugins to be cloned and added to `~/.zshrc` after you done that source zshrc by running the following command:
+Once everything is installed make sure to run `script-name.sh` again for the custom plugins to be cloned and added to `~/.zshrc` after you done that source zshrc by running the following command:
 ```bash
 source ~/.zshrc
 ```
@@ -29,7 +29,7 @@ source ~/.zshrc
 ## Custom Plugins
 The script also includes the installation of two custom plugins, `zsh-autosuggestions` and `zsh-syntax-highlighting`.
 
-If you'd like to add additional custom plugins, simply follow the format in the script by cloning the plugin repository to the `~/.oh-my-zsh/custom/plugins` directory and adding the plugin's in the plugins you can modify this section:
+If you'd like to add additional custom plugins, simply follow the format in the script by cloning the plugin repository to the `~/.oh-my-zsh/custom/plugins` directory the script will do that for you and adding the plugin's in the plugins you can modify this section:
 ```bash
 echo 'Adding plugins to .zshrc...'
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting ...)/' ~/.zshrc
