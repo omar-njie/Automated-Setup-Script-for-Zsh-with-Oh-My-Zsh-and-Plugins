@@ -45,6 +45,7 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 else
   echo 'oh-my-zsh is already installed.'
 fi
+tset
 
 ##################################################
 ##           CUSTOM PLUGINS BEGIN HERE          ##
@@ -64,13 +65,8 @@ fi
 ##           CUSTOM PLUGINS END HERE            ##
 ##################################################
 
-# Add plugins to .zshrc
-if [ -f "$HOME/.zshrc" ]; then
-  echo 'Adding plugins to .zshrc...'
-  sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
-else
-  echo 'No .zshrc file found.'
-fi
+echo 'Adding plugins to .zshrc...'
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
 
 echo 'Restarting terminal...'
 tset 
