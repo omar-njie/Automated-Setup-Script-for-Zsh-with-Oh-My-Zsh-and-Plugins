@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 # Check if git is installed and install it if not
 if ! [ -x "$(command -v git)" ]; then
   echo 'Git is not installed. Installing now...'
@@ -66,11 +64,13 @@ fi
 ##           CUSTOM PLUGINS END HERE            ##
 ##################################################
 
-echo 'Adding plugins to .zshrc...'
-sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+# Add plugins to .zshrc
+if [ -f "$HOME/.zshrc" ]; then
+  echo 'Adding plugins to .zshrc...'
+  sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+else
+  echo 'No .zshrc file found.'
+fi
 
-echo 'Sourcing .zshrc...'
-source ~/.zshrc
 echo 'Restarting terminal...'
 tset 
-# Check if curl is installed and install it if no
