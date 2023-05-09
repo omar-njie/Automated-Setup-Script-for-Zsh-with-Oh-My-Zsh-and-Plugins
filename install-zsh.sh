@@ -38,15 +38,20 @@ fi
 echo 'Installing oh-my-zsh...'
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   if [ -f /etc/debian_version ]; then
+    export RUNZSH=no
+    export CHSH=no
     sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
   else
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	export RUNZSH=no
+	export CHSH=no
+  fi
   fi
 else
   echo 'oh-my-zsh is already installed.'
 fi
 
-while [ ! -d "$HOME/.oh-my-zsh" ]; do
+while [ ! -d "$HOME/.oh-my-zsh/custom" ]; do
   sleep 1
 done
 
@@ -72,4 +77,5 @@ echo 'Adding plugins to .zshrc...'
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
 
 echo 'Restarting terminal...'
-tset 
+tset
+
