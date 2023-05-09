@@ -1,44 +1,33 @@
 #!/bin/bash
 
-# Check if git is installed and install it if not
-if ! [ -x "$(command -v git)" ]; then
-  echo 'Git is not installed. Installing now...'
-  if [ -f /etc/redhat-release ]; then
-    sudo yum install git -y
-  elif [ -f /etc/lsb-release ]; then
-    sudo apt install git -y
-  fi
-else
-  echo 'Git is already installed.'
-fi
-
-# Check if curl is installed and install it if not (not for Debian distros)
-if ! [ -x "$(command -v curl)" ]; then
-  if [ ! -f /etc/debian_version ]; then
-    echo 'curl is not installed. Installing now...'
+# Install packages if they are not already installed
+install_package() {
+  if ! [ -x "$(command -v $1)" ]; then
     if [ -f /etc/redhat-release ]; then
-      sudo yum install curl -y
+      sudo yum install -y $1
     elif [ -f /etc/lsb-release ]; then
-      sudo apt install curl -y
+      sudo apt install -y $1
     fi
+  else
+    echo "$1 is already installed."
   fi
-else
-  echo 'curl is already installed.'
+}
+
+# Install git
+install_package git
+
+# Install curl (not for Debian distros)
+if [ ! -f /etc/debian_version ]; then
+  install_package curl
 fi
 
 # Install zsh
-echo 'Installing zsh...'
-if [ -f /etc/redhat-release ]; then
-  sudo yum install zsh -y
-elif [ -f /etc/lsb-release ]; then
-  sudo apt install zsh -y
-fi
+install_package zsh
 
 # Install oh-my-zsh
-echo 'Installing oh-my-zsh...'
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   if [ -f /etc/debian_version ]; then
-    sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+    sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   else
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
@@ -46,27 +35,18 @@ else
   echo 'oh-my-zsh is already installed.'
 fi
 
+# Install custom plugins
+install_plugin() {
+  if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$1" ]; then
+    git clone https://github.com/zsh-users/$1.git $HOME/.oh-my-zsh/custom/plugins/$1
+  fi
+}
 
-##################################################
-##           CUSTOM PLUGINS BEGIN HERE          ##
-##################################################
+install_plugin zsh-autosuggestions
+install_plugin zsh-syntax-highlighting
 
-# zsh-autosuggestions
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-fi
-
-# zsh-syntax-highlighting
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-fi
-
-##################################################
-##           CUSTOM PLUGINS END HERE            ##
-##################################################
-
-echo 'Adding plugins to .zshrc...'
+# Add plugins to .zshrc
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
 
 echo 'Restarting terminal...'
-tset 
+tset
