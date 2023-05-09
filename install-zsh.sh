@@ -1,15 +1,27 @@
 #!/bin/bash
 
-# Check if curl and git are installed and install them if not
-if ! [ -x "$(command -v curl)" ] || ! [ -x "$(command -v git)" ]; then
-  echo 'curl and/or git is not installed. Installing now...'
+# Check if curl is installed and install it if not
+if ! [ -x "$(command -v curl)" ]; then
+  echo 'curl is not installed. Installing now...'
   if [ -f /etc/redhat-release ]; then
-    sudo yum install curl git -y
+    sudo yum install curl -y
   elif [ -f /etc/lsb-release ]; then
-    sudo apt install curl git -y
+    sudo apt install curl -y
   fi
 else
-  echo 'curl and git are already installed.'
+  echo 'curl is already installed.'
+fi
+
+# Check if git is installed and install it if not
+if ! [ -x "$(command -v git)" ]; then
+  echo 'Git is not installed. Installing now...'
+  if [ -f /etc/redhat-release ]; then
+    sudo yum install git -y
+  elif [ -f /etc/lsb-release ]; then
+    sudo apt install git -y
+  fi
+else
+  echo 'Git is already installed.'
 fi
 
 # Install zsh
@@ -22,16 +34,18 @@ fi
 
 # Install oh-my-zsh
 echo 'Installing oh-my-zsh...'
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Check if .zshrc file exists, create it if not
-if [ ! -f "$HOME/.zshrc" ]; then
-    echo 'Creating .zshrc file...'
-    touch "$HOME/.zshrc"
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  if [ -x "$(command -v curl)" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  elif [ -x "$(command -v wget)" ]; then
+    sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+  fi
+else
+  echo 'oh-my-zsh is already installed.'
 fi
 
 ##################################################
-##             CUSTOM PLUGINS BEGIN HERE        ##
+##   	   CUSTOM PLUGINS BEGIN HERE	        ##
 ##################################################
 
 # zsh-autosuggestions
@@ -45,14 +59,22 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 fi
 
 ##################################################
-##             CUSTOM PLUGINS END HERE          ##
+##   	   CUSTOM PLUGINS END HERE		##
 ##################################################
 
-echo 'Adding plugins to .zshrc...'
-sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+# Add plugins to .zshrc
+if [ -f "$HOME/.zshrc" ]; then
+  echo 'Adding plugins to .zshrc...'
+  sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+else
+  echo 'No .zshrc file found.'
+fi
 
+# Source .zshrc
 echo 'Sourcing .zshrc...'
 source ~/.zshrc
+
+# Reset terminal
 echo 'Restarting terminal...'
 tset
 
