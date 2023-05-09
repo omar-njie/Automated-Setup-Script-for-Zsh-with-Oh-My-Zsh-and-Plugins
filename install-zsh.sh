@@ -45,7 +45,11 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 else
   echo 'oh-my-zsh is already installed.'
 fi
-tset
+
+while [ ! -f "$HOME/.zshrc" ]; do
+  sleep 1
+done
+
 
 ##################################################
 ##           CUSTOM PLUGINS BEGIN HERE          ##
