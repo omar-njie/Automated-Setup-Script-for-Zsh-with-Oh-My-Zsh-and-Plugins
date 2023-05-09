@@ -46,7 +46,6 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 	export RUNZSH=no
 	export CHSH=no
   fi
-  fi
 else
   echo 'oh-my-zsh is already installed.'
 fi
