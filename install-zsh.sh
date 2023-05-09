@@ -20,45 +20,30 @@ elif [ -f /etc/lsb-release ]; then
   sudo apt install zsh -y
 fi
 
-# Check if .zshrc exists
+# Install oh-my-zsh if it's not installed
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo 'Installing oh-my-zsh...'
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  echo 'oh-my-zsh is already installed.'
+fi
+
+# Check if .zshrc file exists
 if [ ! -f "$HOME/.zshrc" ]; then
-  echo "Creating .zshrc file..."
-  touch "$HOME/.zshrc"
+  echo '.zshrc file not found. Creating it...'
+  touch $HOME/.zshrc
 fi
 
-# Install oh-my-zsh
-echo 'Installing oh-my-zsh...'
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-##################################################
-##           CUSTOM PLUGINS BEGIN HERE          ##
-##################################################
-
-# zsh-autosuggestions
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+echo 'Adding plugins to .zshrc...'
+plugins="plugins=(git zsh-autosuggestions zsh-syntax-highlighting)"
+if grep -q "^$plugins$" "$HOME/.zshrc"; then
+  echo 'Plugins already added to .zshrc.'
+else
+  echo $plugins >> $HOME/.zshrc
 fi
 
-# zsh-syntax-highlighting
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-fi
-
-##################################################
-##           CUSTOM PLUGINS END HERE            ##
-##################################################
-
-# Add plugins to .zshrc if not already added
-if ! grep -q 'zsh-autosuggestions' $HOME/.zshrc; then
-    echo 'Adding plugins to .zshrc...'
-    echo 'plugins=(git zsh-autosuggestions zsh-syntax-highlighting)' >> $HOME/.zshrc
-fi
-
-# Source .zshrc
 echo 'Sourcing .zshrc...'
-source $HOME/.zshrc
-
-# Restart terminal
+source ~/.zshrc
 echo 'Restarting terminal...'
 tset
 
