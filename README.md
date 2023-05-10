@@ -45,3 +45,6 @@ To modify the list of plugins in `~/.zshrc`, modify the code in this section dow
 echo 'Adding plugins to .zshrc...'
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting ...)/' ~/.zshrc
 ```
+
+## TODO:
+- Add support for macOS later.
