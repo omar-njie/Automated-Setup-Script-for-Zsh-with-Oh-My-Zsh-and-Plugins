@@ -45,8 +45,10 @@ install_plugin() {
 install_plugin zsh-autosuggestions
 install_plugin zsh-syntax-highlighting
 
-# Add plugins to .zshrc
+# Add plugins and alias to .zshrc
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
+echo 'alias c="clear"' >> ~/.zshrc
 
 echo 'Restarting terminal...'
 tset
+
